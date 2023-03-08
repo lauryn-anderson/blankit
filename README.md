@@ -25,6 +25,17 @@ incorporates more powerful NLP tools and
 customizations to make more informed choices 
 when selecting words to be replaced.
 
+## Usage
+
+Developed in a virtual environment where SpaCy was 
+installed using the following commands:
+
+```commandline
+pip install pandas
+pip install spacy
+python -m spacy download en_core_web_sm
+```
+
 ## License
 
 [MIT License](https://choosealicense.com/licenses/mit/)
