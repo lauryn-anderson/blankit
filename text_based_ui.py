@@ -8,13 +8,13 @@ from text_processing import preprocess_text
 
 def main():
     while True:
-        text = input('Enter text to blankit:')
+        text = input('Enter text to blankit:\n')
         tokens = preprocess_text(text)
         if not tokens.empty:
             output = fill_blanks(tokens)
             print('Here is your complete blankit:\n' + output)
 
-        repeat = input('Enter "y" to play again:')
+        repeat = input('Enter "y" to play again:\n')
         if repeat != "y":
             break
 
@@ -26,7 +26,7 @@ def fill_blanks(tokens):
         if pandas.isnull(token['prompt']):
             output += token['token'].text
         else:
-            output += input(token['prompt'])
+            output += input(token['prompt'] + '\n')
         output += token['token'].whitespace_
 
     return output

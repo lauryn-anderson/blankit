@@ -19,9 +19,10 @@ def preprocess_text(text):
     tokens['pos'] = tokens.apply(lambda row: row.token.pos_, axis=1)
 
     # identify target parts of speech
-    nouns = tokens[tokens['pos'] == 'NOUN']
-    adjectives = tokens[tokens['pos'] == 'ADJ']
-    adverbs = tokens[tokens['pos'] == 'ADV']
+    nouns = tokens[tokens['pos'] == 'NOUN'].copy()
+    adjectives = tokens[tokens['pos'] == 'ADJ'].copy()
+    adverbs = tokens[tokens['pos'] == 'ADV'].copy()
+    verbs = tokens[tokens['pos'] == 'VERB'].copy()
 
     # select tokens to be blanked
     # one from each part of speech plus a subset
@@ -41,6 +42,11 @@ def preprocess_text(text):
         adverbs['prompt'] = 'Adverb'
         blanks_by_pos.append(adverbs.sample(1))
         blanks_by_pos.append(adverbs.sample(frac=0.3))
+
+    if len(verbs) > 0:
+        verbs['prompt'] = 'Verb'
+        blanks_by_pos.append(verbs.sample(1))
+        blanks_by_pos.append(verbs.sample(frac=0.3))
 
     if len(blanks_by_pos) > 0:
         # update token dataframe with selected blanks
