@@ -16,37 +16,39 @@ def preprocess_text(text):
     tokens = pandas.DataFrame(nlp(text), columns=['token'])
     if len(tokens) < 1:
         return tokens
-    tokens['pos'] = tokens.apply(lambda row: row.token.pos_, axis=1)
+    tokens['pos'] = tokens.apply(lambda row: row.token.tag_, axis=1)
 
     # identify target parts of speech
-    nouns = tokens[tokens['pos'] == 'NOUN'].copy()
-    adjectives = tokens[tokens['pos'] == 'ADJ'].copy()
-    adverbs = tokens[tokens['pos'] == 'ADV'].copy()
-    verbs = tokens[tokens['pos'] == 'VERB'].copy()
+
+    targets = {
+        'nouns': tokens[tokens['pos'] == 'NN'].copy(),
+        'plural_nouns': tokens[tokens['pos'] == 'NNS'].copy(),
+        'proper_nouns': tokens[tokens['pos'] == 'NP'].copy(),
+        'adjectives': tokens[tokens['pos'] == 'JJ'].copy(),
+        'adverbs': tokens[tokens['pos'] == 'RB'].copy(),
+        'numbers': tokens[tokens['pos'] == 'CD'].copy(),
+        'exclamations': tokens[tokens['pos'] == 'UH'].copy(),
+        'base_verbs': tokens[tokens['pos'] == 'VB'].copy(),
+        'gerund_verbs': tokens[tokens['pos'] == 'VBG'].copy(),
+    }
+    targets['nouns']['prompt'] = 'Noun'
+    targets['plural_nouns']['prompt'] = 'Plural Noun'
+    targets['proper_nouns']['prompt'] = 'Proper Noun'
+    targets['adjectives']['prompt'] = 'Adjective'
+    targets['adverbs']['prompt'] = 'Adverb'
+    targets['numbers']['prompt'] = 'Number'
+    targets['exclamations']['prompt'] = 'Exclamation'
+    targets['base_verbs']['prompt'] = 'Verb'
+    targets['gerund_verbs']['prompt'] = 'Verb Ending in "ing"'
 
     # select tokens to be blanked
     # one from each part of speech plus a subset
     blanks_by_pos = []
 
-    if len(nouns) > 0:
-        nouns['prompt'] = 'Noun'
-        blanks_by_pos.append(nouns.sample(1))
-        blanks_by_pos.append(nouns.sample(frac=0.3))
-
-    if len(adjectives) > 0:
-        adjectives['prompt'] = 'Adjective'
-        blanks_by_pos.append(adjectives.sample(1))
-        blanks_by_pos.append(adjectives.sample(frac=0.3))
-
-    if len(adverbs) > 0:
-        adverbs['prompt'] = 'Adverb'
-        blanks_by_pos.append(adverbs.sample(1))
-        blanks_by_pos.append(adverbs.sample(frac=0.3))
-
-    if len(verbs) > 0:
-        verbs['prompt'] = 'Verb'
-        blanks_by_pos.append(verbs.sample(1))
-        blanks_by_pos.append(verbs.sample(frac=0.3))
+    for _, target in targets.items():
+        if len(target) > 0:
+            blanks_by_pos.append(target.sample(1))
+            blanks_by_pos.append(target.sample(frac=0.3))
 
     if len(blanks_by_pos) > 0:
         # update token dataframe with selected blanks
@@ -58,5 +60,3 @@ def preprocess_text(text):
     print(tokens)
     return tokens
 
-
-# preprocess_text('In natural language processing, we boldly approach interesting problems.')
