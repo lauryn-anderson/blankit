@@ -3,7 +3,6 @@
 import numpy as np
 import spacy
 from spacy.lang.en import English
-
 import pandas
 
 nlp = spacy.load('en_core_web_sm')
@@ -13,17 +12,20 @@ spacy_model = English()
 def preprocess_text(text):
 
     # tokenize and preprocess text
-    tokens = pandas.DataFrame(nlp(text), columns=['token'])
+    doc = nlp(text)
+    doc = retokenize_entities(doc)
+    tokens = pandas.DataFrame(doc, columns=['token'])
     if len(tokens) < 1:
         return tokens
     tokens['pos'] = tokens.apply(lambda row: row.token.tag_, axis=1)
+    tokens['biluo'] = tokens.apply(lambda row: row.token.ent_iob_, axis=1)
 
     # identify target parts of speech
 
     targets = {
         'nouns': tokens[tokens['pos'] == 'NN'].copy(),
         'plural_nouns': tokens[tokens['pos'] == 'NNS'].copy(),
-        'proper_nouns': tokens[tokens['pos'] == 'NP'].copy(),
+        'proper_nouns': tokens[tokens['pos'] == 'NNP'].copy(),
         'adjectives': tokens[tokens['pos'] == 'JJ'].copy(),
         'adverbs': tokens[tokens['pos'] == 'RB'].copy(),
         'numbers': tokens[tokens['pos'] == 'CD'].copy(),
@@ -60,3 +62,15 @@ def preprocess_text(text):
     print(tokens)
     return tokens
 
+
+def retokenize_entities(doc):
+
+    for ent in reversed(doc.ents):
+        # retokenize entities in reverse order
+        # so that the indices are not displaced as the operation takes place
+        with doc.retokenize() as retokenizer:
+            retokenizer.merge(
+                doc[ent.start:ent.end],
+                attrs={"LEMMA": str(doc[ent.start:ent.end])}
+            )
+    return doc
