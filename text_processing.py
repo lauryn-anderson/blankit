@@ -18,21 +18,33 @@ def preprocess_text(text):
     if len(tokens) < 1:
         return tokens
     tokens['pos'] = tokens.apply(lambda row: row.token.tag_, axis=1)
-    tokens['biluo'] = tokens.apply(lambda row: row.token.ent_iob_, axis=1)
+    tokens['ent'] = tokens.apply(lambda row: row.token.ent_type_, axis=1)
+
+    # identify target entities
+
+    targets = {
+        'people': tokens[tokens['ent'] == 'PERSON'].copy(),
+        'orgs': tokens[tokens['ent'] == 'ORG'].copy(),
+        'places': tokens[tokens['ent'] == 'GPE'].copy(),
+    }
+    targets['people']['prompt'] = "Person's Name"
+    targets['orgs']['prompt'] = 'Organization'
+    targets['places']['prompt'] = 'Place'
 
     # identify target parts of speech
 
-    targets = {
-        'nouns': tokens[tokens['pos'] == 'NN'].copy(),
-        'plural_nouns': tokens[tokens['pos'] == 'NNS'].copy(),
-        'proper_nouns': tokens[tokens['pos'] == 'NNP'].copy(),
-        'adjectives': tokens[tokens['pos'] == 'JJ'].copy(),
-        'adverbs': tokens[tokens['pos'] == 'RB'].copy(),
-        'numbers': tokens[tokens['pos'] == 'CD'].copy(),
-        'exclamations': tokens[tokens['pos'] == 'UH'].copy(),
-        'base_verbs': tokens[tokens['pos'] == 'VB'].copy(),
-        'gerund_verbs': tokens[tokens['pos'] == 'VBG'].copy(),
-    }
+    pos_tokens = tokens.drop(index=tokens[tokens['ent'] != ''].index)
+    targets.update({
+        'nouns': pos_tokens[pos_tokens['pos'] == 'NN'].copy(),
+        'plural_nouns': pos_tokens[pos_tokens['pos'] == 'NNS'].copy(),
+        'proper_nouns': pos_tokens[pos_tokens['pos'] == 'NNP'].copy(),
+        'adjectives': pos_tokens[pos_tokens['pos'] == 'JJ'].copy(),
+        'adverbs': pos_tokens[pos_tokens['pos'] == 'RB'].copy(),
+        'numbers': pos_tokens[pos_tokens['pos'] == 'CD'].copy(),
+        'exclamations': pos_tokens[pos_tokens['pos'] == 'UH'].copy(),
+        'base_verbs': pos_tokens[pos_tokens['pos'] == 'VB'].copy(),
+        'gerund_verbs': pos_tokens[pos_tokens['pos'] == 'VBG'].copy(),
+    })
     targets['nouns']['prompt'] = 'Noun'
     targets['plural_nouns']['prompt'] = 'Plural Noun'
     targets['proper_nouns']['prompt'] = 'Proper Noun'
