@@ -125,3 +125,77 @@ one.
 Next, I updated the blank-creation process to 
 include the three named entities mentioned above.
 
+## Pronoun Gender Mismatch
+
+Now that named entities are being subcategorized 
+and blanked, people's names are being replaced. 
+However, this poses an issue for other mentions 
+of a person, since English inflects pronouns 
+based on gender. Therefore, a sentence like 
+"Erik helped himself to a slice of cake" 
+might end up being "Sophie helped himself to 
+a shed of cake". 
+
+If Sophie uses she/her pronouns, this mismatch
+in pronoun gender 
+could be considered ungrammatical or even 
+distressing. If Erik is being replaced with a 
+different name, it would be ideal to specify 
+the pronouns that will be associated with 
+a replacement name; this is my next goal. 
+
+To make this possible, two functionalities are 
+needed. First, we need to match up names with 
+their associated pronouns. Then, we need to 
+classify pronouns and use them to update the 
+fill-in-the-blank prompt. 
+
+### Coreference Resolution
+
+Coreference resolution is an NLP preprocessing 
+task that seeks to identify all mentions that 
+refer to the same entity in the discourse world. 
+So, any time a set of multiple words reference 
+the same person or thing, coref resolution 
+tries to identify this set. 
+
+[Coreferee](https://github.com/richardpaulhudson/coreferee) 
+is an open source library that interfaces with 
+SpaCy to provide coreference resolution. It uses 
+hardcoded rules to help resolve coreferences, 
+including lists of words that are inherently 
+male/female, or inherently animate/inanimate, 
+which impact possible pronoun associations. 
+It also uses machine learning and neural 
+networks to identify subtle patterns in how 
+an entity tends to be referenced multiple times.
+
+Using Coreferee to identify coreferences, I 
+associate each person's name with a list of 
+pronouns it matches. 
+
+### Feature Identification
+
+SpaCy comes with a Morphologizer that assigns 
+morphological features to tokens according to 
+the [Universal Dependencies FEATS format](https://universaldependencies.org/format.html#morphological-annotation).
+
+For each person's name, I extract the gender 
+features from every token in the list of 
+coreferences. If these coreferences are 
+uniformly masculine or uniformly feminine, 
+I update the prompt to specify these 
+preferred pronouns. 
+
+Unfortunately, the Coreferee and Morphologizer 
+are poor at identifying the use of singular they 
+or other pronouns. This probably stems from both 
+the conflation between singular and plural they
+(in contrast to the unambiguous he/she), from 
+a relative dearth of singular they usages in 
+training data, and from biases in the programmers 
+who built these libraries. This means that the 
+generator cannot identify when a person uses 
+they/them or other pronouns; when it is not 
+clearly he/him or she/her, no pronouns are 
+indicated in the prompt. 

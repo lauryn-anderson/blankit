@@ -34,6 +34,8 @@ installed using the following commands:
 pip install pandas
 pip install spacy
 python -m spacy download en_core_web_sm
+pip install coreferee
+python -m coreferee install en
 ```
 
 ## License
