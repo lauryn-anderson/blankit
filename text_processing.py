@@ -95,6 +95,9 @@ def identify_targets(tokens):
         'gerund_verbs': pos_tokens[pos_tokens['pos'] == 'VBG'].copy(),
     })
     targets['adverbs'] = filter_adverbs(targets['adverbs'])
+    targets['base_verbs'] = filter_verbs(targets['base_verbs'])
+    targets['gerund_verbs'] = filter_verbs(targets['gerund_verbs'])
+
     targets['nouns']['prompt'] = 'Noun'
     targets['plural_nouns']['prompt'] = 'Plural Noun'
     targets['adjectives']['prompt'] = 'Adjective'
@@ -132,7 +135,7 @@ def resolve_coreferences(people, gender_identities):
 
 
 def filter_adverbs(adverbs):
-    # drop all instances of "not" since it is an abnormal adverb
+    # drop all instances of NOT since it is an abnormal adverb
     adverbs = adverbs.drop(index=adverbs[adverbs['lemma'] == 'not'].index)
 
     # only include adverbs that modify verbs or adjectives
@@ -141,6 +144,11 @@ def filter_adverbs(adverbs):
     adverbs = adverbs.drop(index=to_drop.index)
 
     return adverbs
+
+
+def filter_verbs(verbs):
+    # drop all instances of BE since it is an abnormal/functional verb
+    return verbs.drop(index=verbs[verbs['lemma'] == 'be'].index)
 
 
 def ensure_whitespace(tokens):

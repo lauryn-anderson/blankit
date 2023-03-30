@@ -340,6 +340,72 @@ of missing whitespace, and to avoid making blanks
 out of the words before and after the missing 
 whitespace. 
 
+## Delexical verbs
+
+As with adverbs, certain verbs are higher in 
+semantic content, while others are more functional 
+and contribute little lexical meaning to a 
+sentence. 
+
+One of the biggest examples of this is a copula. 
+A copula serves just to link the subject of the 
+sentence to the subject complement. In English, 
+the most common copula is the verb BE:
+
+- Rhys and Erik are my brothers
+- The book was on the table
+- The jersey is blue
+
+Copular BE does not contribute meaningful 
+semantic content, at least not like a verb like 
+RUN or COOK or DEBATE. It simply links the two. 
+
+BE has other functionalities, including as an 
+auxiliary, where it is used to form the passive 
+voice ("The race was won") or the continuous 
+aspect ("Sophie is making a cake").
+
+In any of these uses, it is infelicitous to 
+replace the BE verb with a more content-heavy 
+verb. It would be ideal to omit it from all 
+verb blanks. 
+
+### Lemmas
+
+In morphology, the concept of a word is broken 
+into multiple technical definitions. A wordform 
+is a concrete instance of a word that occurs in a 
+sentence. A wordform is often inflected according 
+to the requirements of the sentence. 
+
+In contrast, a lexeme is an abstract notion of a 
+word; the type of word you see in a dictionary 
+entry, where it has one or more meanings, but 
+the actual forms it takes are the surface 
+manifestation as a wordform. 
+
+A lexeme is usually represented by a single 
+base form or citation form know as a lemma. 
+In our case, I have been using the lemma BE to 
+represent the lexeme of this common English verb, 
+which is associated with a bunch of wordforms 
+like _be_, _is_, _am_, _was_, and more. 
+
+### Lemmatizer
+
+In natural language processing, tokens are 
+wordforms, not lexemes.
+SpaCy provides a lemmatizer that associates 
+tokens with their base form, their lemma. 
+
+It is remarkably effective. Even for heavily 
+disguised constructions like "gonna", the 
+lemmatizer identifies the lexemes GO and TO. 
+It correctly identifies 'm, being, were, and 
+other wordforms associated with BE. This provides 
+a simple way to omit all these wordforms from 
+the blanked verbs.
+
 ## Other goals
 
 copular be
