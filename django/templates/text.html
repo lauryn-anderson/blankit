@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container text-center">
+  <div class="row">
+    <div class="col-lg"></div>
+    <div class="col">
+      <h1><a href="{% url 'home' %}">blankit</a></h1>
+      <br>
+      <form action="" method="post">
+        {% csrf_token %}
+        {% crispy form %}
+      </form>
+    </div>
+    <div class="col-lg"></div>
+  </div>
+</div>
+{% endblock content %}
