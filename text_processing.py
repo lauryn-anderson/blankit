@@ -27,6 +27,7 @@ def preprocess_text(text):
     tokens['dep'] = tokens.apply(lambda row: row.token.dep_, axis=1)
     tokens['head'] = tokens.apply(lambda row: row.token.head.pos_, axis=1)
     tokens['lemma'] = tokens.apply(lambda row: row.token.lemma_, axis=1)
+    tokens['ws'] = tokens.apply(lambda row: row.token.whitespace_, axis=1)
 
     # select tokens to be blanked
     targets = identify_targets(tokens)
@@ -82,10 +83,10 @@ def identify_targets(tokens):
     # identify target parts of speech
 
     pos_tokens = tokens.drop(index=tokens[tokens['ent'] != ''].index)
+    pos_tokens = ensure_whitespace(pos_tokens)
     targets.update({
         'nouns': pos_tokens[pos_tokens['pos'] == 'NN'].copy(),
         'plural_nouns': pos_tokens[pos_tokens['pos'] == 'NNS'].copy(),
-        'proper_nouns': pos_tokens[pos_tokens['pos'] == 'NNP'].copy(),
         'adjectives': pos_tokens[pos_tokens['pos'] == 'JJ'].copy(),
         'adverbs': pos_tokens[pos_tokens['pos'] == 'RB'].copy(),
         'numbers': pos_tokens[pos_tokens['pos'] == 'CD'].copy(),
@@ -96,7 +97,6 @@ def identify_targets(tokens):
     targets['adverbs'] = filter_adverbs(targets['adverbs'])
     targets['nouns']['prompt'] = 'Noun'
     targets['plural_nouns']['prompt'] = 'Plural Noun'
-    targets['proper_nouns']['prompt'] = 'Proper Noun'
     targets['adjectives']['prompt'] = 'Adjective'
     targets['adverbs']['prompt'] = 'Adverb'
     targets['numbers']['prompt'] = 'Number'
@@ -141,3 +141,13 @@ def filter_adverbs(adverbs):
     adverbs = adverbs.drop(index=to_drop.index)
 
     return adverbs
+
+
+def ensure_whitespace(tokens):
+    # drop all tokens that don't have a space in between them
+    # eliminates constructions like "gonna", "it's"
+    contractions = tokens.drop(index=tokens[tokens['ws'] != ''].index)
+    tokens = tokens.drop(index=contractions.index)
+    contractions.index += 1
+    to_drop = pandas.merge(tokens, contractions, how='inner')
+    return tokens.drop(index=to_drop.index)

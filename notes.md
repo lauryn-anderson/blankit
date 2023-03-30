@@ -312,11 +312,38 @@ this provides an effective means to subcategorize
 adverb utterances by the type of category they 
 modify. 
 
+## Contractions
+
+Personal testing indicates another shortcoming of 
+the current paradigm. The tokenizer is wise enough 
+to split contractions into their components.
+
+> I just wanna tell you how I'm feeling 
+> 
+> Gotta make you understand 
+> 
+> Never gonna give you up 
+> 
+> Never gonna let you down
+
+This quote creates tokens like
+"got", "ta", "gon", and "na". These do not produce 
+grammatical words when selected for blanking; if 
+_got_ is replaced with _destroy_, we get 
+
+> destroyta make you understand
+
+Luckily, these constructions can be identified 
+by the lack of whitespace between the tokens. 
+I updated the generator to find all instances 
+of missing whitespace, and to avoid making blanks 
+out of the words before and after the missing 
+whitespace. 
+
+## Other goals
+
 copular be
 capitalization
 a/an
-
-proper noun??
-whitespace
 
 We're no strangers to love You know the rules and so do I (do I) A full commitment's what I'm thinking of  You wouldn't get this from any other guy I just wanna tell you how I'm feeling  Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you
