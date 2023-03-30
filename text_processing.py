@@ -1,4 +1,4 @@
-# Lauryn Anderson
+﻿# Lauryn Anderson
 # MIT License
 import numpy as np
 import spacy
@@ -24,6 +24,9 @@ def preprocess_text(text):
         return tokens
     tokens['pos'] = tokens.apply(lambda row: row.token.tag_, axis=1)
     tokens['ent'] = tokens.apply(lambda row: row.token.ent_type_, axis=1)
+    tokens['dep'] = tokens.apply(lambda row: row.token.dep_, axis=1)
+    tokens['head'] = tokens.apply(lambda row: row.token.head.pos_, axis=1)
+    tokens['lemma'] = tokens.apply(lambda row: row.token.lemma_, axis=1)
 
     # select tokens to be blanked
     targets = identify_targets(tokens)
@@ -90,6 +93,7 @@ def identify_targets(tokens):
         'base_verbs': pos_tokens[pos_tokens['pos'] == 'VB'].copy(),
         'gerund_verbs': pos_tokens[pos_tokens['pos'] == 'VBG'].copy(),
     })
+    targets['adverbs'] = filter_adverbs(targets['adverbs'])
     targets['nouns']['prompt'] = 'Noun'
     targets['plural_nouns']['prompt'] = 'Plural Noun'
     targets['proper_nouns']['prompt'] = 'Proper Noun'
@@ -125,3 +129,15 @@ def resolve_coreferences(people, gender_identities):
             if chain in gender_identities:
                 person['prompt'] = gender_identities[chain]
     return people
+
+
+def filter_adverbs(adverbs):
+    # drop all instances of "not" since it is an abnormal adverb
+    adverbs = adverbs.drop(index=adverbs[adverbs['lemma'] == 'not'].index)
+
+    # only include adverbs that modify verbs or adjectives
+    to_drop = adverbs.drop(adverbs[adverbs['head'] == 'VERB'].index)
+    to_drop = to_drop.drop(to_drop[to_drop['head'] == 'ADJ'].index)
+    adverbs = adverbs.drop(index=to_drop.index)
+
+    return adverbs

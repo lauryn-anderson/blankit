@@ -125,7 +125,7 @@ one.
 Next, I updated the blank-creation process to 
 include the three named entities mentioned above.
 
-## Pronoun Gender Mismatch
+## Preferred Pronoun Identification
 
 Now that named entities are being subcategorized 
 and blanked, people's names are being replaced. 
@@ -199,3 +199,124 @@ generator cannot identify when a person uses
 they/them or other pronouns; when it is not 
 clearly he/him or she/her, no pronouns are 
 indicated in the prompt. 
+
+## Adverb Subcategorization
+
+Adverbs are tricky. A wide range of words are 
+all classified as adverbs. This includes:
+
+- verb (phrase) modifiers
+  - He _frantically_ ran past the door
+  - She _also_ ran past the door
+- adjective modifiers
+  - This is _overwhelmingly_ delicious
+  - We should be _more_ inclusive
+- adverb modifiers
+  - She spoke _so_ quietly
+  - This is _really_ not a good idea
+- determiner modifiers
+  - _Almost_ no plants are dangerous
+- preposition phrase modifiers
+  - We drove _nearly_ until midnight
+
+Essentially, adjectives modify nouns, while 
+adverbs modify everything else. 
+The POS tagger also labels some more 
+borderline words as adverbs:
+
+- He does _not_ like to dance
+
+However, most adverbs cannot be exchanged between 
+to all of these classes, which could create 
+ungrammatical sentences using the generator.
+
+- *He _more_ ran past the door
+- *He _very_ ran past the door
+- *He _not_ ran past the door
+
+In a Mad Libs context, participants tend to fill 
+blanks with adverbs that have more semantic 
+content and are often derived from adjectives 
+using the suffix _-ly_:
+
+- quick, quickly
+- eager, eagerly
+- sudden, suddenly
+- sad, sadly
+
+These are in contrast to more functional 
+adverbs without adjectival equivalents, such as:
+
+- very
+- not 
+- so 
+- almost
+- here
+
+Assuming that the replacement words are 
+these adjective-based ones, it should be 
+grammatical or at least marginal to use them 
+to modify some categories:
+
+- verb (phrases)
+  - He _boldly_ ran past the door
+  - He _suddenly_ ran past the door
+- adjectives
+  - This is _boldly_ delicious
+  - This is _suddenly_ delicious
+
+But not others:
+
+- adverbs
+  - *She spoke _boldly_ quietly
+- determiners
+  - *_Boldly_ no plants are dangerous
+- preposition phrases
+  - *We drove _boldly_ until midnight 
+
+Therefore, I will use a rule that omits 
+_not_ and _n't_ from potential adverb 
+blanks, and seek a way to distinguish 
+verb/adjective modification from 
+adverb/determiner/preposition phrase 
+modification. These varied modifier 
+relationships are grammatical/syntactic 
+dependencies, so I will turn to a syntactic 
+preprocessing tool. 
+ 
+### Dependency Parsing
+
+SpaCy provides a Dependency Parser that 
+constructs a type of syntax tree from input 
+sentences. Given an input sentence, this parser 
+generates a series of trees where arcs connect 
+each word to the phrase head it depends on, and 
+each tree in the series is closer to the optimal 
+answer. It uses a combination of a search 
+algorithm guided by heuristics, augmented with 
+a neural network that lets the algorithm "undo" 
+steps in the process that it can only recognize 
+later as mistakes. 
+
+Applying this parser, I can get valuable info 
+on each adverb in the input text. Specifically, 
+every token marked as an adverb is linked to 
+the head of its phrase. That way, if it modifies 
+a verb, I can look at the token it depends on 
+and recognize that it is a verb. If it modifies 
+another adverb, I can go to that token and 
+identify it as an adverb. 
+
+As long as this dependency parser is effective, 
+this provides an effective means to subcategorize 
+adverb utterances by the type of category they 
+modify. 
+
+copular be
+capitalization
+a/an
+
+proper noun??
+whitespace
+
+We're no strangers to love You know the rules and so do I (do I) A full commitment's what I'm thinking of  You wouldn't get this from any other guy I just wanna tell you how I'm feeling  Gotta make you understand Never gonna give you up Never gonna let you down Never gonna run around and desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie and hurt you
