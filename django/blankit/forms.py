@@ -5,7 +5,7 @@ from crispy_forms.layout import Submit
 
 class TextInputForm(forms.Form):
     text = forms.CharField(
-        label='what text do you want to blank?',
+        label='enter the text you want to use',
         widget=forms.Textarea,
         max_length=2000
     )

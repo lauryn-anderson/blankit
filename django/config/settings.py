@@ -25,7 +25,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
-ALLOWED_HOSTS = ['.ondigitalocean.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['blankit.lauryn.dev', '.ondigitalocean.app', 'localhost', '127.0.0.1']
 
 
 # Application definition

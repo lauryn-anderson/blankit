@@ -40,7 +40,6 @@ class TextInputView(FormView):
             self.whitespace = form.cleaned_data.get('whitespace')
             self.update(blank)
         index = self.get_prompt()
-        print(f'index {index}')
         if index is None:
             # filling is complete
             output = ''
@@ -80,7 +79,6 @@ class TextInputView(FormView):
     def get_prompt(self):
         index = 0
         while index < len(self.prompts):
-            print(type(self.prompts[index]))
             if self.prompts[index] != '' and isinstance(self.prompts[index], str):
                 return index
             index += 1
