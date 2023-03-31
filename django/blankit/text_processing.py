@@ -76,9 +76,9 @@ def identify_targets(tokens):
         'orgs': tokens[tokens['ent'] == 'ORG'].copy(),
         'places': tokens[tokens['ent'] == 'GPE'].copy(),
     }
-    targets['people']['prompt'] = "Person's Name"
-    targets['orgs']['prompt'] = 'Organization'
-    targets['places']['prompt'] = 'Place'
+    targets['people']['prompt'] = "person's name"
+    targets['orgs']['prompt'] = 'organization'
+    targets['places']['prompt'] = 'place'
 
     # identify target parts of speech
 
@@ -98,14 +98,14 @@ def identify_targets(tokens):
     targets['base_verbs'] = filter_verbs(targets['base_verbs'])
     targets['gerund_verbs'] = filter_verbs(targets['gerund_verbs'])
 
-    targets['nouns']['prompt'] = 'Noun'
-    targets['plural_nouns']['prompt'] = 'Plural Noun'
-    targets['adjectives']['prompt'] = 'Adjective'
-    targets['adverbs']['prompt'] = 'Adverb'
-    targets['numbers']['prompt'] = 'Number'
-    targets['exclamations']['prompt'] = 'Exclamation'
-    targets['base_verbs']['prompt'] = 'Verb'
-    targets['gerund_verbs']['prompt'] = 'Verb Ending in "ing"'
+    targets['nouns']['prompt'] = 'noun'
+    targets['plural_nouns']['prompt'] = 'plural noun'
+    targets['adjectives']['prompt'] = 'adjective'
+    targets['adverbs']['prompt'] = 'adverb'
+    targets['numbers']['prompt'] = 'number'
+    targets['exclamations']['prompt'] = 'exclamation'
+    targets['base_verbs']['prompt'] = 'verb'
+    targets['gerund_verbs']['prompt'] = 'verb ending in "ing"'
 
     return targets
 
