@@ -48,7 +48,7 @@ def preprocess_text(text):
         blanks = pandas.concat(blanks_by_pos).drop_duplicates()
         tokens = pandas.merge(tokens, blanks, 'left', validate='one_to_one')
     else:
-        tokens['prompt'] = np.nan
+        tokens['prompt'] = ''
 
     with pandas.option_context('display.max_rows', None, 'display.max_columns', None):
         print(tokens)

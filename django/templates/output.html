@@ -7,12 +7,8 @@
     <div class="col">
       <h1><a href="{% url 'home' %}">blankit</a></h1>
       <br>
-      <p>paste in whatever text you like (stories, recipes, music lyrics, interviews, anything)
-        but keep it shorter than you think or you'll be here for a while</p>
-      <form action="" method="post">
-        {% csrf_token %}
-        {% crispy form %}
-      </form>
+      <p>{{ text }}</p>
+      <a href="{% url 'text' %}" class="btn btn-primary">play again</a>
     </div>
     <div class="col-lg"></div>
   </div>
