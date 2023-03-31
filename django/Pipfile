@@ -11,6 +11,7 @@ spacy = "*"
 coreferee = "*"
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
+environs = "*"
 
 [dev-packages]
 
