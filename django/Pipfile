@@ -12,6 +12,7 @@ coreferee = "*"
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
 environs = "*"
+gunicorn = "*"
 
 [dev-packages]
 
