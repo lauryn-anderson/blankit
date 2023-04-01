@@ -97,6 +97,7 @@ def identify_targets(tokens):
     targets['adverbs'] = filter_adverbs(targets['adverbs'])
     targets['base_verbs'] = filter_verbs(targets['base_verbs'])
     targets['gerund_verbs'] = filter_verbs(targets['gerund_verbs'])
+    targets['numbers'] = filter_numbers(targets['numbers'])
 
     targets['nouns']['prompt'] = 'noun'
     targets['plural_nouns']['prompt'] = 'plural noun'
@@ -149,6 +150,11 @@ def filter_adverbs(adverbs):
 def filter_verbs(verbs):
     # drop all instances of BE since it is an abnormal/functional verb
     return verbs.drop(index=verbs[verbs['lemma'] == 'be'].index)
+
+
+def filter_numbers(numbers):
+    # drop all instances of ONE since it is an abnormal/functional number
+    return numbers.drop(index=numbers[numbers['lemma'] == 'one'].index)
 
 
 def ensure_whitespace(tokens):
