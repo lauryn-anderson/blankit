@@ -27,6 +27,7 @@ when selecting words to be replaced.
 
 This project was presented at the Verbatium Colloquium
 at the University of Calgary on 1 April 2023. 
+Slides available [here](/slides.pdf).
 
 ## Usage
 
