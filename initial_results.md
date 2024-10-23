@@ -21,7 +21,7 @@ defense. As Noun of that, I got to meet a lot of people Verb in the
 private Noun industry. That was a Adjective experience, but I found I was Adverb 
 disappointed with some of the answers they Verb to my questions.
 
-# Recipe Sample
+## Recipe Sample
 
 Easy All-Purpose Barbecue Sauce
 
@@ -49,7 +49,7 @@ minutes (Noun should Verb by about one-third). Verb Noun with more
 molasses, vinegar, or hot sauce to taste. Verb barbecue sauce can be 
 stored in a Adjective container in the refrigerator for several Noun.
 
-# Literature Sample
+## Literature Sample
 
 It is a truth Adverb acknowledged, that a single man in possession of 
 a good fortune must be in want of a wife.
@@ -69,7 +69,7 @@ all about it."
 
 Mr. Bennet made no Noun.
 
-# Lyrics Sample
+## Lyrics Sample
 
 "The problem is all inside your head," she said to me
 "The Noun is Adjective if you Verb it logically

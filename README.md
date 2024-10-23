@@ -25,6 +25,9 @@ incorporates more powerful NLP tools and
 customizations to make more informed choices 
 when selecting words to be replaced.
 
+This project was presented at the Verbatium Colloquium
+at the University of Calgary on 1 April 2023. 
+
 ## Usage
 
 Developed in a virtual environment where SpaCy was 
